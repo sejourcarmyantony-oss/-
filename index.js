@@ -174,7 +174,7 @@ async function createSession(numero, socketId) {
             try { store.messages?.clear?.(); store.chats?.clear?.(); } catch (e) {}
         }, 3600000);
 
-        await new Promise(r => setTimeout(r, 3000));
+        await new Promise(r => setTimeout(r, 8000));
 
         let pairResult = { success: true };
 
@@ -403,4 +403,3 @@ server.listen(PORT, async () => {
     console.log(chalk.hex('#6c5ce7').bold(`╚══════════════════════════════════════╝\n`));
     await loadExistingSessions();
 });
-    
