@@ -38,9 +38,25 @@ const {
     default: makeWASocket,
     useMultiFileAuthState,
     DisconnectReason,
-    jidDecode,
-    makeInMemoryStore
+    jidDecode
 } = require('@whiskeysockets/baileys');
+
+function makeSimpleStore() {
+    return {
+        chats: new Map(),
+        messages: new Map(),
+        bind(ev) {
+            ev.on('messages.upsert', ({ messages }) => {
+                for (const m of messages) {
+                    const jid = m.key?.remoteJid;
+                    if (!jid) continue;
+                    if (!this.messages.has(jid)) this.messages.set(jid, []);
+                    this.messages.get(jid).push(m);
+                }
+            });
+        }
+    };
+}
 
 const {
     smsg
@@ -151,7 +167,7 @@ async function createSession(numero, socketId) {
             auth: state
         });
 
-        const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) });
+        const store = makeSimpleStore();
         store.bind(Olsen.ev);
 
         const storeClearInterval = setInterval(() => {
@@ -387,4 +403,4 @@ server.listen(PORT, async () => {
     console.log(chalk.hex('#6c5ce7').bold(`╚══════════════════════════════════════╝\n`));
     await loadExistingSessions();
 });
-                            
+    
