@@ -171,7 +171,7 @@ async function createSession(numero, socketId) {
                 if (socketId) io.to(socketId).emit('pairing:code', { numero: clean, code: formatted });
                 pairResult = { success: true, code: formatted };
             } catch (e) {
-                console.error('PAIRING ERROR:', e);
+                process.stderr.write('PAIRING ERROR: ' + (e?.stack || e?.message || JSON.stringify(e)) + '\n');
                 const errMsg = { message: 'Failed to generate code. Check the number.' };
                 io.to(`numero:${clean}`).emit('error', errMsg);
                 if (socketId) io.to(socketId).emit('error', errMsg);
@@ -374,4 +374,3 @@ server.listen(PORT, async () => {
     console.log(chalk.hex('#6c5ce7').bold(`╚══════════════════════════════════════╝\n`));
     await loadExistingSessions();
 });
-  
