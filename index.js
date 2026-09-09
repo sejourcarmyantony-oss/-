@@ -295,6 +295,18 @@ app.get('/api/status', (req, res) => {
     });
 });
 
+app.post('/api/pair', async (req, res) => {
+    const { number } = req.body;
+    if (!number) return res.status(400).json({ success: false, error: 'numero_required' });
+
+    try {
+        const result = await createSession(number, null);
+        res.json(result || { success: false, error: 'unknown' });
+    } catch (e) {
+        res.status(500).json({ success: false, error: 'server_error' });
+    }
+});
+
 app.post('/api/generate-pair', async (req, res) => {
     const secret = req.headers['x-worker-secret'];
     if (!secret || secret !== WORKER_SECRET) {
@@ -374,3 +386,4 @@ server.listen(PORT, async () => {
     console.log(chalk.hex('#6c5ce7').bold(`╚══════════════════════════════════════╝\n`));
     await loadExistingSessions();
 });
+            
