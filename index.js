@@ -275,6 +275,7 @@ async function createSession(numero, socketId) {
         return pairResult;
 
     } catch (err) {
+        process.stderr.write('CREATE SESSION ERROR: ' + (err?.stack || err?.message || JSON.stringify(err)) + '\n');
         try { clearInterval(storeClearInterval); } catch (e) {}
         sessions.delete(clean);
         broadcastSessions();
@@ -386,4 +387,4 @@ server.listen(PORT, async () => {
     console.log(chalk.hex('#6c5ce7').bold(`╚══════════════════════════════════════╝\n`));
     await loadExistingSessions();
 });
-            
+                            
