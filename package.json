@@ -2,11 +2,13 @@
   "name": "shadow-bug",
   "version": "1.0.0",
   "main": "api/index.js",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
     "socket.io": "^4.7.5",
     "pino": "^8.17.2",
     "chalk": "^4.1.2",
-    "@whiskeysockets/baileys": "6.7.22"
+    "@whiskeysockets/baileys": "6.7.22",
+    "sharp": "^0.33.0"
   }
 }
